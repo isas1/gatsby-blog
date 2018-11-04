@@ -12,9 +12,19 @@ const Layout = ({ data }) => {
         const { frontmatter } = edge.node
         // console.log(frontmatter.path)
         return (
+          <div 
+            key={frontmatter.path}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              fontFamily: 'avenir',
+              padding: 10
+          }}>
           <Link to={frontmatter.path}>
             {frontmatter.title}
           </Link>
+          </div>
         )
       })} {/* Mapping */}
     </div>
