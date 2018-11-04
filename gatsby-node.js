@@ -9,11 +9,11 @@ const createTagPages = (createPage, posts) => {
   posts.forEach(({ node }) => {
     if (node.frontmatter.tags) {
       node.frontmatter.tags.forEach(tag => {
-        if (!postByTag[tag]) {
+        if (!postsByTag[tag]) {
           postsByTag[tag] = []
         }
 
-        postByTag[tag].push(node)
+        postsByTag[tag].push(node)
       })
     }
   })
@@ -29,15 +29,17 @@ const createTagPages = (createPage, posts) => {
   })
 }
 
-    exports.createPages = (({ graphql, actions }) => {
-      const { createPage } = actions
+// main create pages export
+exports.createPages = (({ graphql, actions }) => {
+  const { createPage } = actions
 
-      return new Promise((resolve, reject) => {
-        const blogPostTemplate = path.resolve('src/templates/blogPost.js')
+  return new Promise((resolve, reject) => {
+    const blogPostTemplate = path.resolve('src/templates/blogPost.js')
 
-        resolve(
-          graphql(
-            `
+    // querying all .md files with src/pages
+    resolve(
+      graphql(
+        `
           query {
             allMarkdownRemark (
               sort: { order: ASC, fields: frontmatter___date }
@@ -46,6 +48,8 @@ const createTagPages = (createPage, posts) => {
                 node {
                   frontmatter {
                     path
+                    title
+                    tags
                   }
                 }
               }
@@ -53,29 +57,29 @@ const createTagPages = (createPage, posts) => {
           }
           
         `
-          ).then(result => {
+      ).then(result => {
 
-            //additional data for next and previous links added to context
-            const allPosts = result.data.allMarkdownRemark.edges
+        //additional data for next and previous links added to context
+        const allPosts = result.data.allMarkdownRemark.edges
+        
+        createTagPages(createPage, allPosts)
 
-            createTagPages(createPage, posts)
-            
-            allPosts.forEach(({ node }, index) => {
-              const path = node.frontmatter.path
-              createPage({
-                path,
-                component: blogPostTemplate,
-                context: {
-                  pathSlug: path,
-                  prev: index === 0 ? null : allPosts[index - 1].node,
-                  next: index === (allPosts.length - 1) ? null : allPosts[index + 1].node
-                }
-              })
-
-              resolve()
-            })
+        allPosts.forEach(({ node }, index) => {
+          const path = node.frontmatter.path
+          createPage({
+            path,
+            component: blogPostTemplate,
+            context: {
+              pathSlug: path,
+              prev: index === 0 ? null : allPosts[index - 1].node,
+              next: index === (allPosts.length - 1) ? null : allPosts[index + 1].node
+            }
           })
-        )
 
+          resolve()
+        })
       })
-    })
+    )
+
+  })
+})

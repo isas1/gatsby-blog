@@ -3,10 +3,7 @@ import { graphql, Link } from 'gatsby'
 
 const Template = ({ data, pageContext }) => {
 
-
-  console.log(pageContext)
   const { next, prev } = pageContext
-
 
   const { markdownRemark } = data
   const title = markdownRemark.frontmatter.title
