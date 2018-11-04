@@ -1,23 +1,40 @@
 import React from 'react'
-// import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 
-const Template = ({data}) => {
+const Template = ({ data, pageContext }) => {
 
-  // console.log(props)
+
+  console.log(pageContext)
+  const { next, prev } = pageContext
+
+
   const { markdownRemark } = data
   const title = markdownRemark.frontmatter.title
   const content = markdownRemark.html
 
-  return ( 
+  return (
     <div>
-      <h1 style={{fontFamily: 'avenir'}}>{title}</h1>
+      <h1 style={{ fontFamily: 'avenir' }}>{title}</h1>
 
-      <div 
+      <div
         className="blogpost"
-        dangerouslySetInnerHTML ={{__html: content}}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
+
+      {prev &&
+        <Link to={prev.frontmatter.path}>
+          Prev post
+            </Link>
+      }
+      
+      {next &&
+        <Link to={next.frontmatter.path}>
+          Next post
+        </Link>
+      }
+
     </div>
-   )
+  )
 }
 
 export const query = graphql`
@@ -30,5 +47,5 @@ export const query = graphql`
     }
   }
 `
- 
+
 export default Template;

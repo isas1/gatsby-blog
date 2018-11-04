@@ -4,13 +4,11 @@ import Header from '../components/Header'
 
 const Layout = ({ data }) => {
   const { edges } = data.allMarkdownRemark
-  // console.log(edges)
   return (
     <div>
       <Header />
       {edges.map(edge => {
         const { frontmatter } = edge.node
-        // console.log(frontmatter.path)
         return (
           <div 
             key={frontmatter.path}
