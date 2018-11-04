@@ -21,18 +21,23 @@ const Template = ({ data, pageContext }) => {
         dangerouslySetInnerHTML={{ __html: content }}
       />
 
+      <div style={{ 
+        fontFamily: 'avenir',
+        marginBottom: '1em' }}>
       {prev &&
         <Link to={prev.frontmatter.path}>
           Prev post
             </Link>
       }
-      
+      </div>
+
+      <div style={{fontFamily: 'avenir'}}>
       {next &&
         <Link to={next.frontmatter.path}>
           Next post
         </Link>
       }
-
+      </div>
     </div>
   )
 }
