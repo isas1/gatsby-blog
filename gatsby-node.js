@@ -62,8 +62,10 @@ exports.createPages = (({ graphql, actions }) => {
         //additional data for next and previous links added to context
         const allPosts = result.data.allMarkdownRemark.edges
         
+        // pass the query results into the tags page 
         createTagPages(createPage, allPosts)
 
+        // initialise the blog posts
         allPosts.forEach(({ node }, index) => {
           const path = node.frontmatter.path
           createPage({
