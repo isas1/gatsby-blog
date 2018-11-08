@@ -3,7 +3,7 @@ import { graphql, Link } from 'gatsby'
 
 const allTagsIndexTemplate = ({ data, pageContext }) => {
 
-  console.log(pageContext)
+  // console.log(pageContext)
   return (
     <div>
       <div>

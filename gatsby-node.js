@@ -14,6 +14,7 @@ const createTagPages = (createPage, posts) => {
         }
 
         postsByTag[tag].push(node)
+        console.log(postsByTag)
       })
     }
   })
@@ -27,6 +28,19 @@ const createTagPages = (createPage, posts) => {
       tags: tags.sort()
     }
   })
+  
+  tags.forEach((tag) => {
+    const posts = postsByTag[tag]
+
+    createPage({
+      path: `/tags/${tag}`,
+      component: singleTagIndexTemplate,
+      context: {
+        posts,
+        tag
+      }
+    })
+  })
 }
 
 // main create pages export
@@ -36,7 +50,7 @@ exports.createPages = (({ graphql, actions }) => {
   return new Promise((resolve, reject) => {
     const blogPostTemplate = path.resolve('src/templates/blogPost.js')
 
-    // querying all .md files with src/pages
+    // querying all .md files within src/pages
     resolve(
       graphql(
         `
